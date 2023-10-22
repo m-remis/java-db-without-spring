@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.example.demo.test.utils.TestingDelayUtil.delay;
+
 class CommandProcessorTests {
 
     private static CommandProcessor commandProcessor;
@@ -23,7 +25,7 @@ class CommandProcessorTests {
         commandProcessor.addCommand(testCommand);
         var consumerThread = new Thread(commandProcessor::processCommands);
         consumerThread.start();
-        Thread.sleep(1000);
+        delay();
         commandProcessor.stop();
         consumerThread.interrupt();
 
@@ -37,7 +39,7 @@ class CommandProcessorTests {
         var consumerThread = new Thread(commandProcessor::processCommands);
         consumerThread.start();
         commandProcessor.stop();
-        Thread.sleep(1000);
+        delay();
         commandProcessor.addCommand(testCommand);
         consumerThread.interrupt();
 

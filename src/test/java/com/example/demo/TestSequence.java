@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.example.demo.test.utils.TestingDelayUtil.delay;
+
 class TestSequence {
 
     private static UserCommands userCommands;
@@ -31,7 +33,8 @@ class TestSequence {
                 new UserDto(1, "a1", "Robert"),
                 new UserDto(2, "a2", "Martin")
         ).forEach(tesUser -> commandProcessor.addCommand(() -> userCommands.addUserCommand(tesUser)));
-
+        // Sleep for a longer period to allow commands to be processed
+        delay();
         Assertions.assertFalse(userCommands.findAllUsersCommand().isEmpty());
 
         commandProcessor.addCommand(userCommands::printAllUsersCommand);
@@ -39,7 +42,7 @@ class TestSequence {
         commandProcessor.addCommand(userCommands::printAllUsersCommand);
 
         // Sleep for a longer period to allow commands to be processed
-        Thread.sleep(5000);
+        delay();
         commandProcessor.stop();
         consumerThread.interrupt();
 
