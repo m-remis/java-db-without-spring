@@ -4,10 +4,7 @@ package com.example.demo;
 import com.example.demo.config.DbConfig;
 import com.example.demo.dto.UserDto;
 import com.example.demo.service.UserCommands;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.List;
 
@@ -27,6 +24,7 @@ class UserCommandsTests {
     }
 
     @Test
+    @DisplayName("Add user command")
     void testAddUserCommand() {
         var userEntity = new UserDto(1, "guid", "username");
 
@@ -37,6 +35,7 @@ class UserCommandsTests {
     }
 
     @Test
+    @DisplayName("Add user command with same ID twice")
     void testAddUserCommand_TryToSaveSamePrimaryKeyTwice() {
         var userEntity = new UserDto(1, "guid", "username");
         var userEntity2 = new UserDto(1, "guid2", "username2");
@@ -51,6 +50,7 @@ class UserCommandsTests {
     }
 
     @Test
+    @DisplayName("Get all users command")
     void testGetAllUsersCommand() {
         var userEntity1 = new UserDto(1, "guid", "username");
         var userEntity2 = new UserDto(2, "guid2", "username2");
@@ -63,6 +63,7 @@ class UserCommandsTests {
     }
 
     @Test
+    @DisplayName("Delete all users command")
     void testDeleteAllUsersCommand() {
         var user1 = new UserDto(2, "guid1", "username1");
         var user2 = new UserDto(2, "guid2", "username2");

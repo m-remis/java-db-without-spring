@@ -6,6 +6,7 @@ import com.example.demo.processor.CommandProcessor;
 import com.example.demo.service.UserCommands;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -25,7 +26,8 @@ class TestSequence {
     }
 
     @Test
-    void mainFunctionalityTest() throws InterruptedException {
+    @DisplayName("Main test flow")
+    void mainFunctionalityTest() {
         var consumerThread = new Thread(commandProcessor::processCommands);
         consumerThread.start();
         // Test users

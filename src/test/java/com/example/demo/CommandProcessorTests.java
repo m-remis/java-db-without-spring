@@ -3,6 +3,7 @@ package com.example.demo;
 import com.example.demo.processor.CommandProcessor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -19,7 +20,8 @@ class CommandProcessorTests {
     }
 
     @Test
-    void testAddCommand_ShouldProcessCommands() throws InterruptedException {
+    @DisplayName("Add user command to processor")
+    void testAddCommand_ShouldProcessCommands() {
         var counter = new AtomicInteger(0);
         Runnable testCommand = counter::incrementAndGet;
         commandProcessor.addCommand(testCommand);
@@ -33,7 +35,8 @@ class CommandProcessorTests {
     }
 
     @Test
-    void testStopCommandProcessor_ShouldNotProcessCommands() throws InterruptedException {
+    @DisplayName("Stop command processor, should not process submitted commands")
+    void testStopCommandProcessor_ShouldNotProcessCommands() {
         var counter = new AtomicInteger(0);
         Runnable testCommand = counter::incrementAndGet;
         var consumerThread = new Thread(commandProcessor::processCommands);
