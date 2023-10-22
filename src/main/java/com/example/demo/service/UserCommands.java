@@ -1,6 +1,8 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.UserDto;
 import com.example.demo.entity.UserEntity;
+import com.example.demo.util.ConvertUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
@@ -17,19 +19,17 @@ public class UserCommands {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserCommands.class);
 
-    public void addUserCommand(UserEntity user) {
+    public void addUserCommand(UserDto userDto) {
         LOGGER.info("[Adding user to DB]");
-        findUserByIdCommand(user.getUserId())
-                .ifPresentOrElse(found -> LOGGER.info("[User with userId {} already exists. Insertion aborted]", user.getUserId()),
+        findUserByIdCommand(userDto.id())
+                .ifPresentOrElse(found -> LOGGER.info("[User with userId {} already exists. Insertion aborted]", userDto.id()),
                         () -> {
                             EntityManagerFactory emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
                             EntityManager entityManager = emf.createEntityManager();
-
                             EntityTransaction transaction = entityManager.getTransaction();
                             transaction.begin();
-                            entityManager.persist(user);
+                            entityManager.persist(ConvertUtil.convert(userDto));
                             transaction.commit();
-
                             entityManager.close();
                             emf.close();
                         });
@@ -40,38 +40,32 @@ public class UserCommands {
         findAllUsersCommand().forEach(userEntity -> LOGGER.info(userEntity.toString()));
     }
 
-    public List<UserEntity> findAllUsersCommand() {
+    public List<UserDto> findAllUsersCommand() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
         EntityManager entityManager = emf.createEntityManager();
-
         List<UserEntity> users = entityManager.createQuery("SELECT e FROM UserEntity e", UserEntity.class).getResultList();
         entityManager.close();
         emf.close();
-        return users;
+        return users.stream().map(ConvertUtil::convert).toList();
     }
 
-    public Optional<UserEntity> findUserByIdCommand(Integer userId) {
+    public Optional<UserDto> findUserByIdCommand(Integer userId) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
         EntityManager entityManager = emf.createEntityManager();
-
         UserEntity user = entityManager.find(UserEntity.class, userId);
-
         entityManager.close();
         emf.close();
-
-        return Optional.ofNullable(user);
+        return ConvertUtil.convertToOptionalDto(user);
     }
 
     public void deleteAllUsersCommand() {
         LOGGER.info("[Deleting all users]");
         EntityManagerFactory emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
         EntityManager entityManager = emf.createEntityManager();
-
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         entityManager.createQuery("DELETE FROM UserEntity").executeUpdate();
         transaction.commit();
-
         entityManager.close();
         emf.close();
     }

@@ -21,12 +21,9 @@ class CommandProcessorTests {
         var counter = new AtomicInteger(0);
         Runnable testCommand = counter::incrementAndGet;
         commandProcessor.addCommand(testCommand);
-
         var consumerThread = new Thread(commandProcessor::processCommands);
         consumerThread.start();
-
         Thread.sleep(1000);
-
         commandProcessor.stop();
         consumerThread.interrupt();
 
@@ -37,15 +34,11 @@ class CommandProcessorTests {
     void testStopCommandProcessor_ShouldNotProcessCommands() throws InterruptedException {
         var counter = new AtomicInteger(0);
         Runnable testCommand = counter::incrementAndGet;
-
         var consumerThread = new Thread(commandProcessor::processCommands);
         consumerThread.start();
-
         commandProcessor.stop();
         Thread.sleep(1000);
-
         commandProcessor.addCommand(testCommand);
-
         consumerThread.interrupt();
 
         Assertions.assertEquals(0, counter.get());
