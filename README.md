@@ -1,4 +1,6 @@
-#### Simple demo application that provides REST APIs for managing user posts.
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/m-remis/java-db-without-spring/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/m-remis/java-db-without-spring/tree/main)
+
+#### Simple demo application that demonstrates usage of db and java
 
 Program in Java language that is processing commands from FIFO queue using Producer –
 Consumer pattern.
