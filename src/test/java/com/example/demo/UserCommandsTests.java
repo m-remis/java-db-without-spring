@@ -10,10 +10,10 @@ import java.util.List;
 
 class UserCommandsTests {
 
-    private static UserCommands userCommands;
+    private UserCommands userCommands;
 
-    @BeforeAll
-    public static void setUp() {
+    @BeforeEach
+    public void setUp() {
         DbConfig.executeSchemaScript();
         userCommands = new UserCommands();
     }
@@ -52,11 +52,11 @@ class UserCommandsTests {
     @Test
     @DisplayName("Get all users command")
     void testGetAllUsersCommand() {
-        var user1 = new UserDto(1, "guid", "username");
-        var user2 = new UserDto(2, "guid2", "username2");
-        var user3 = new UserDto(3, "guid3", "username3");
-
-        var usersToBeSaved = List.of(user1, user2, user3);
+        var usersToBeSaved = List.of(
+                new UserDto(1, "guid", "username"),
+                new UserDto(2, "guid2", "username2"),
+                new UserDto(3, "guid3", "username3")
+        );
         usersToBeSaved.forEach(userCommands::addUserCommand);
 
         Assertions.assertTrue(userCommands.findAllUsersCommand().containsAll(usersToBeSaved));
@@ -65,11 +65,11 @@ class UserCommandsTests {
     @Test
     @DisplayName("Delete all users command")
     void testDeleteAllUsersCommand() {
-        var user1 = new UserDto(2, "guid1", "username1");
-        var user2 = new UserDto(2, "guid2", "username2");
-        var user3 = new UserDto(3, "guid3", "username3");
-
-        var usersToBeSaved = List.of(user1, user2, user3);
+        var usersToBeSaved = List.of(
+                new UserDto(2, "guid1", "username1"),
+                new UserDto(2, "guid2", "username2"),
+                new UserDto(3, "guid3", "username3")
+        );
         usersToBeSaved.forEach(userCommands::addUserCommand);
         userCommands.deleteAllUsersCommand();
 
