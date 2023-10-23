@@ -30,12 +30,13 @@ class TestSequence {
     void mainFunctionalityTest() {
         var consumerThread = new Thread(commandProcessor::processCommands);
         consumerThread.start();
+        commandProcessor.startProcessing();
         // Test users
         List.of(
                 new UserDto(1, "a1", "Robert"),
                 new UserDto(2, "a2", "Martin")
         ).forEach(tesUser -> commandProcessor.addCommand(() -> userCommands.addUserCommand(tesUser)));
-        // Sleep for a longer period to allow commands to be processed
+        // Sleep this thread for a longer period to allow commands to be processed in consumer thread
         delay();
         Assertions.assertFalse(userCommands.findAllUsersCommand().isEmpty());
 
@@ -43,10 +44,9 @@ class TestSequence {
         commandProcessor.addCommand(userCommands::deleteAllUsersCommand);
         commandProcessor.addCommand(userCommands::printAllUsersCommand);
 
-        // Sleep for a longer period to allow commands to be processed
+        // Sleep this thread for a longer period to allow commands to be processed in consumer thread
         delay();
-        commandProcessor.stop();
-        consumerThread.interrupt();
+        commandProcessor.stopProcessing();
 
         Assertions.assertTrue(userCommands.findAllUsersCommand().isEmpty());
     }

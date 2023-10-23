@@ -20,33 +20,29 @@ class CommandProcessorTests {
     }
 
     @Test
-    @DisplayName("Add user command to processor")
+    @DisplayName("Add command to processor")
     void testAddCommand_ShouldProcessCommands() {
         var counter = new AtomicInteger(0);
         Runnable testCommand = counter::incrementAndGet;
-        commandProcessor.addCommand(testCommand);
         var consumerThread = new Thread(commandProcessor::processCommands);
         consumerThread.start();
+        commandProcessor.startProcessing();
+        commandProcessor.addCommand(testCommand);
+        // Sleep this thread for a longer period to allow commands to be processed in consumer thread
         delay();
-        commandProcessor.stop();
-        consumerThread.interrupt();
 
         Assertions.assertEquals(1, counter.get());
     }
 
     @Test
-    @DisplayName("Stop command processor, should not process submitted commands")
+    @DisplayName("Stopped command processor, should not process submitted commands")
     void testStopCommandProcessor_ShouldNotProcessCommands() {
         var counter = new AtomicInteger(0);
         Runnable testCommand = counter::incrementAndGet;
         var consumerThread = new Thread(commandProcessor::processCommands);
         consumerThread.start();
-        commandProcessor.stop();
-        delay();
         commandProcessor.addCommand(testCommand);
-        consumerThread.interrupt();
-
         Assertions.assertEquals(0, counter.get());
-        Assertions.assertTrue(commandProcessor.isExecuting());
+        Assertions.assertFalse(commandProcessor.isExecuting());
     }
 }

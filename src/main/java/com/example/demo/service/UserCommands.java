@@ -19,7 +19,7 @@ public class UserCommands {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserCommands.class);
 
-    public void addUserCommand(UserDto userDto) {
+    public synchronized void addUserCommand(UserDto userDto) {
         LOGGER.info("[Adding user to DB]");
         findUserByIdCommand(userDto.id())
                 .ifPresentOrElse(found -> LOGGER.info("[User with userId {} already exists. Insertion aborted]", userDto.id()),

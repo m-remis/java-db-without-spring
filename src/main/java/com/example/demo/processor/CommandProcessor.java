@@ -1,48 +1,46 @@
 package com.example.demo.processor;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class CommandProcessor {
 
-    private final Queue<Runnable> commandQueue = new LinkedList<>();
-    private boolean executeCommands = false;
+    private final BlockingQueue<Runnable> commandQueue = new LinkedBlockingQueue<>();
+    private volatile boolean executeCommands = false;
 
-    public void addCommand(Runnable command) {
-        synchronized (commandQueue) {
-            commandQueue.offer(command);
-            // Notify the consumer thread
-            commandQueue.notifyAll();
-        }
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommandProcessor.class);
+
+    public synchronized void addCommand(Runnable command) {
+        LOGGER.info("Adding command...");
+        var added = commandQueue.offer(command);
+        LOGGER.info("Command added: {}", added);
     }
 
     public void processCommands() {
-        executeCommands = true;
+        LOGGER.info("Processing commands, enabled: {}", executeCommands);
         while (executeCommands) {
-            Runnable command;
-            synchronized (commandQueue) {
-                while (commandQueue.isEmpty()) {
-                    try {
-                        commandQueue.wait(); // Wait for commands to be added
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                        return;
-                    }
-                }
-                command = commandQueue.poll();
-            }
-
-            if (command != null) {
+            try {
+                Runnable command = commandQueue.take();
                 command.run();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
             }
         }
     }
 
-    public synchronized void stop() {
+    public void stopProcessing() {
         executeCommands = false;
     }
 
-    public synchronized boolean isExecuting() {
+    public void startProcessing() {
+        executeCommands = true;
+    }
+
+    public boolean isExecuting() {
         return executeCommands;
     }
 }

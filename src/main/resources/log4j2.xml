@@ -14,6 +14,9 @@
         <logger name="com.example.demo.service.UserCommands" level="info" additivity="false">
             <appender-ref ref="console" />
         </logger>
+        <logger name="com.example.demo.processor.CommandProcessor" level="info" additivity="false">
+            <appender-ref ref="console" />
+        </logger>
         <Root level="error">
             <AppenderRef ref="console"/>
         </Root>
