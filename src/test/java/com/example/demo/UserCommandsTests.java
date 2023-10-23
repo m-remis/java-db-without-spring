@@ -37,27 +37,27 @@ class UserCommandsTests {
     @Test
     @DisplayName("Add user command with same ID twice")
     void testAddUserCommand_TryToSaveSamePrimaryKeyTwice() {
-        var userEntity = new UserDto(1, "guid", "username");
-        var userEntity2 = new UserDto(1, "guid2", "username2");
+        var user1 = new UserDto(1, "guid", "username");
+        var user2 = new UserDto(1, "guid2", "username2");
 
-        userCommands.addUserCommand(userEntity);
-        userCommands.addUserCommand(userEntity2);
+        userCommands.addUserCommand(user1);
+        userCommands.addUserCommand(user2);
 
         Assertions.assertTrue(userCommands.findUserByIdCommand(1).isPresent());
-        Assertions.assertEquals(userEntity, userCommands.findUserByIdCommand(1).get());
-        Assertions.assertNotEquals(userEntity2.userName(), userCommands.findUserByIdCommand(1).get().userName());
-        Assertions.assertNotEquals(userEntity2.guid(), userCommands.findUserByIdCommand(1).get().guid());
+        Assertions.assertEquals(user1, userCommands.findUserByIdCommand(1).get());
+        Assertions.assertNotEquals(user2.userName(), userCommands.findUserByIdCommand(1).get().userName());
+        Assertions.assertNotEquals(user2.guid(), userCommands.findUserByIdCommand(1).get().guid());
     }
 
     @Test
     @DisplayName("Get all users command")
     void testGetAllUsersCommand() {
-        var userEntity1 = new UserDto(1, "guid", "username");
-        var userEntity2 = new UserDto(2, "guid2", "username2");
-        var userEntity3 = new UserDto(3, "guid3", "username3");
+        var user1 = new UserDto(1, "guid", "username");
+        var user2 = new UserDto(2, "guid2", "username2");
+        var user3 = new UserDto(3, "guid3", "username3");
 
-        var usersToBeSaved = List.of(userEntity1, userEntity2, userEntity3);
-        List.of(userEntity1, userEntity2, userEntity3).forEach(item -> userCommands.addUserCommand(item));
+        var usersToBeSaved = List.of(user1, user2, user3);
+        usersToBeSaved.forEach(userCommands::addUserCommand);
 
         Assertions.assertTrue(userCommands.findAllUsersCommand().containsAll(usersToBeSaved));
     }
@@ -70,7 +70,7 @@ class UserCommandsTests {
         var user3 = new UserDto(3, "guid3", "username3");
 
         var usersToBeSaved = List.of(user1, user2, user3);
-        usersToBeSaved.forEach(item -> userCommands.addUserCommand(item));
+        usersToBeSaved.forEach(userCommands::addUserCommand);
         userCommands.deleteAllUsersCommand();
 
         Assertions.assertTrue(userCommands.findAllUsersCommand().isEmpty());
