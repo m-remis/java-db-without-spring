@@ -26,12 +26,12 @@ class UserCommandsTests {
     @Test
     @DisplayName("Add user command")
     void testAddUserCommand() {
-        var userEntity = new UserDto(1, "guid", "username");
+        var user = new UserDto(1, "guid", "username");
 
-        userCommands.addUserCommand(userEntity);
+        userCommands.addUserCommand(user);
 
         Assertions.assertTrue(userCommands.findUserByIdCommand(1).isPresent());
-        Assertions.assertEquals(userEntity, userCommands.findUserByIdCommand(1).get());
+        Assertions.assertEquals(user, userCommands.findUserByIdCommand(1).get());
     }
 
     @Test

@@ -13,7 +13,7 @@ import java.util.List;
 
 import static com.example.demo.test.utils.TestingDelayUtil.delay;
 
-class TestSequence {
+class MainTestSequence {
 
     private static UserCommands userCommands;
     private static CommandProcessor commandProcessor;
@@ -27,7 +27,7 @@ class TestSequence {
 
     @Test
     @DisplayName("Main test flow")
-    void mainFunctionalityTest() {
+    void mainTestFlowTest() {
         var consumerThread = new Thread(commandProcessor::processCommands);
         consumerThread.start();
         commandProcessor.startProcessing();

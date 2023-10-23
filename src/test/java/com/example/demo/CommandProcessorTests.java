@@ -42,6 +42,7 @@ class CommandProcessorTests {
         var consumerThread = new Thread(commandProcessor::processCommands);
         consumerThread.start();
         commandProcessor.addCommand(testCommand);
+
         Assertions.assertEquals(0, counter.get());
         Assertions.assertFalse(commandProcessor.isExecuting());
     }
