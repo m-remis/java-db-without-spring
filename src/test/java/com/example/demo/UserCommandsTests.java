@@ -37,16 +37,17 @@ class UserCommandsTests {
     @Test
     @DisplayName("Add user command with same ID twice")
     void testAddUserCommand_TryToSaveSamePrimaryKeyTwice() {
-        var user1 = new UserDto(1, "guid", "username");
-        var user2 = new UserDto(1, "guid2", "username2");
+        final var idToUse = 1;
+        var user1 = new UserDto(idToUse, "guid", "username");
+        var user2 = new UserDto(idToUse, "guid2", "username2");
 
         userCommands.addUserCommand(user1);
         userCommands.addUserCommand(user2);
 
-        Assertions.assertTrue(userCommands.findUserByIdCommand(1).isPresent());
-        Assertions.assertEquals(user1, userCommands.findUserByIdCommand(1).get());
-        Assertions.assertNotEquals(user2.userName(), userCommands.findUserByIdCommand(1).get().userName());
-        Assertions.assertNotEquals(user2.guid(), userCommands.findUserByIdCommand(1).get().guid());
+        Assertions.assertTrue(userCommands.findUserByIdCommand(idToUse).isPresent());
+        Assertions.assertEquals(user1, userCommands.findUserByIdCommand(idToUse).get());
+        Assertions.assertNotEquals(user2.userName(), userCommands.findUserByIdCommand(idToUse).get().userName());
+        Assertions.assertNotEquals(user2.guid(), userCommands.findUserByIdCommand(idToUse).get().guid());
     }
 
     @Test
