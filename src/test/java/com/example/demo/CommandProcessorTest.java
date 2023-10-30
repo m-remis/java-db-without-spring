@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
 
 import static com.example.demo.test.utils.TestingDelayUtil.delay;
 
-class CommandProcessorTests {
+class CommandProcessorTest {
 
     private CommandProcessor commandProcessor;
 

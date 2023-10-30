@@ -8,7 +8,7 @@ import org.junit.jupiter.api.*;
 
 import java.util.List;
 
-class UserCommandsTests {
+class UserCommandsTest {
 
     private UserCommands userCommands;
 

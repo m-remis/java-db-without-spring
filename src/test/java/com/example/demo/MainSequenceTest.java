@@ -10,7 +10,7 @@ import java.util.List;
 import static com.example.demo.config.DbConfig.executeSchemaScript;
 import static com.example.demo.test.utils.TestingDelayUtil.delay;
 
-class MainSequenceTests {
+class MainSequenceTest {
 
     private UserCommands userCommands;
     private CommandProcessor commandProcessor;
